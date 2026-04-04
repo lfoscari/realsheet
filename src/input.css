@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+label {
+  @apply text-gray-500;
+}
+
+label > input, label > small, label > span {
+  @apply text-white;
+}
+
+h2 {
+  @apply font-bold text-gray-500;
+}
+
+input, textarea {
+  @apply placeholder:text-gray-800;
+}
+
+textarea {
+  @apply min-w-0 w-full border border-gray-500 p-3 mt-1;
+}
+
+input[type="number"] {
+  @apply appearance-none;
+}
+
+input[type="checkbox"] {
+  @apply checked:accent-pink-500 focus:ring-0;
+}
+
+input[type="text"], input[type="number"], textarea {
+  @apply rounded-md px-2 py-1 caret-pink-500 ring-1 ring-gray-500/10 focus:ring-2 focus:ring-pink-500 focus:outline-none;
+}

@@ -1,0 +1,1 @@
+The goal is to build a quick way of creating and sharing D&D character sheets. Simply open the website, fill in the details of your character and share the URL to anyone. The entire sheet will be saved in the URL, no need to login. You can also find your old character sheets in the browser's history.
