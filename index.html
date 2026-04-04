@@ -318,12 +318,13 @@
                 ></textarea>
             </div>
 
-            <div class="flex flex-wrap">
+            <div class="flex flex-wrap justify-around md:items-center gap-3">
                 <!-- <a x-on:click="info()" class="text-gray-500 cursor-pointer m-auto">Information</a> -->
+                <p class="text-gray-500">The character sheet is saved in the URL, feel free to share it or to check the browser history for old ones.</p>
                 <a
                     x-on:click="reset()"
-                    class="text-gray-500 cursor-pointer m-auto"
-                    >Clear character sheet</a
+                    class="px-3 py-1 hover:border-gray-500 border border-transparent rounded-md text-gray-500 cursor-pointer"
+                    >⌦ Clear</a
                 >
             </div>
         </fieldset>
