@@ -1,11 +1,47 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="./src/output.css" rel="stylesheet" />
-        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
         <title>D&D Character sheet</title>
+
+        <!-- Primary Meta Tags -->
+        <meta name="title" content="D&D Character sheet" />
+        <meta
+            name="description"
+            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
+        />
+        <link rel="canonical" href="https://lfoscari.github.io/realsheet/" />
+
+        <!-- Open Graph / Facebook -->
+        <meta property="og:type" content="website" />
+        <meta
+            property="og:url"
+            content="https://lfoscari.github.io/realsheet/"
+        />
+        <meta property="og:title" content="D&D Character sheet" />
+        <meta
+            property="og:description"
+            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
+        />
+
+        <!-- Twitter -->
+        <meta property="twitter:card" content="summary_large_image" />
+        <meta
+            property="twitter:url"
+            content="https://lfoscari.github.io/realsheet/"
+        />
+        <meta property="twitter:title" content="D&D Character sheet" />
+        <meta
+            property="twitter:description"
+            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
+        />
+
+        <link href="./src/output.css" rel="stylesheet" />
+        <script
+            defer
+            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+        ></script>
     </head>
 
     <body
@@ -15,7 +51,6 @@
         x-on:change.debounce="onDataChange"
     >
         <fieldset class="grid grid-cols-2 items-center gap-3">
-
             <h2 class="col-span-2">Character</h2>
 
             <label>Name:</label>
@@ -34,25 +69,13 @@
             />
 
             <label>Background:</label>
-            <input
-                x-model="background"
-                type="text"
-                placeholder="Background"
-            />
+            <input x-model="background" type="text" placeholder="Background" />
 
             <label>Player Name:</label>
-            <input
-                x-model="playerName"
-                type="text"
-                placeholder="Player Name"
-            />
-            
+            <input x-model="playerName" type="text" placeholder="Player Name" />
+
             <label>Race:</label>
-            <input
-                x-model="race"
-                type="text"
-                placeholder="Race"
-            />
+            <input x-model="race" type="text" placeholder="Race" />
 
             <label>Alignment:</label>
             <select x-model="alignment">
@@ -71,31 +94,14 @@
             <h2 class="col-span-2"></h2>
 
             <label>Experience Points:</label>
-            <input
-                x-model="xp"
-                type="number"
-                min="0"
-                placeholder="XP"
-            />
+            <input x-model="xp" type="number" min="0" placeholder="XP" />
 
             <label>Inspirations:</label>
-            <input
-                x-model="inspirations"
-                type="number"
-                min="0"
-            />
+            <input x-model="inspirations" type="number" min="0" />
             <label>Proficiency Bonus:</label>
-            <input
-                x-model="proficiencyBonus"
-                type="number"
-                min="0"
-            />
+            <input x-model="proficiencyBonus" type="number" min="0" />
             <label>Passive Wisdom:</label>
-            <input
-                x-model="passivePerception"
-                type="number"
-                min="0"
-            />
+            <input x-model="passivePerception" type="number" min="0" />
 
             <h2 class="col-span-2"></h2>
             <h2 class="col-span-2">Combat</h2>
@@ -103,42 +109,19 @@
             <label>Armor Class:</label>
             <input x-model="ac" type="number" min="0" />
             <label>Initiative:</label>
-            <input
-                x-model="initiative"
-                type="number"
-                min="0"
-            />
+            <input x-model="initiative" type="number" min="0" />
             <label>Speed:</label>
-            <input
-                x-model="speed"
-                type="number"
-                min="0"
-            />
+            <input x-model="speed" type="number" min="0" />
             <label>Hit Point Maximum:</label>
-            <input
-                x-model="hpMax"
-                type="number"
-                min="0"
-            />
+            <input x-model="hpMax" type="number" min="0" />
             <label>Current Hit Points:</label>
-            <input
-                x-model="hpCurrent"
-                type="number"
-                min="0"
-            />
+            <input x-model="hpCurrent" type="number" min="0" />
             <label>Temporary Hit Points:</label>
-            <input
-                x-model="hpTemp"
-                type="number"
-                min="0"
-            />
+            <input x-model="hpTemp" type="number" min="0" />
             <label>Hit Dice Total:</label>
-            <input
-                x-model="hitDiceTotal"
-                type="text"
-            />
+            <input x-model="hitDiceTotal" type="text" />
             <label>Hit Dice Current:</label>
-            <input x-model="hitDiceCurrent" type="text"/>
+            <input x-model="hitDiceCurrent" type="text" />
 
             <h2 class="col-span-2"></h2>
             <h2 class="col-span-2">Death Saves</h2>
@@ -171,9 +154,7 @@
                             min="0"
                         />
                     </div>
-                    <label>
-                        (<span x-text="attrModifier(attr)"></span>)
-                    </label>
+                    <label> (<span x-text="attrModifier(attr)"></span>) </label>
 
                     <div class="col-span-3">
                         <input
@@ -182,26 +163,31 @@
                         />
                         <small>Saving throw proficiency</small>
                     </div>
-                
+
                     <template x-for="skill in attr.skills" :key="skill.name">
                         <div class="grid grid-cols-subgrid col-span-3">
                             <div class="col-span-2">
-                            <input
-                                x-model="skill.proficiency"
-                                type="checkbox"
-                                alt="proficiency"
-                            />
-                            <input
-                                x-model="skill.expertise"
-                                type="checkbox"
-                                alt="expertise"
-                            />
-                            <span
-                                x-text="skill.name"
-                                class="inline-block w-36"
-                            ></span>
+                                <input
+                                    x-model="skill.proficiency"
+                                    type="checkbox"
+                                    alt="proficiency"
+                                />
+                                <input
+                                    x-model="skill.expertise"
+                                    type="checkbox"
+                                    alt="expertise"
+                                />
+                                <span
+                                    x-text="skill.name"
+                                    class="inline-block w-36"
+                                ></span>
                             </div>
-                            <label>(<span x-text="skillModifier(attr, skill)"></span>)</label>   
+                            <label
+                                >(<span
+                                    x-text="skillModifier(attr, skill)"
+                                ></span
+                                >)</label
+                            >
                         </div>
                     </template>
                 </div>
@@ -334,11 +320,15 @@
 
             <div class="flex flex-wrap">
                 <!-- <a x-on:click="info()" class="text-gray-500 cursor-pointer m-auto">Information</a> -->
-                <a x-on:click="reset()" class="text-gray-500 cursor-pointer m-auto">Clear character sheet</a>
+                <a
+                    x-on:click="reset()"
+                    class="text-gray-500 cursor-pointer m-auto"
+                    >Clear character sheet</a
+                >
             </div>
         </fieldset>
-        
-        <script>            
+
+        <script>
             document.addEventListener("alpine:init", () => {
                 Alpine.data("sheet", () => ({
                     name: "",
@@ -359,7 +349,7 @@
                                     name: "Athletics",
                                     proficiency: false,
                                     expertise: false,
-                                }
+                                },
                             ],
                         },
                         {
@@ -523,14 +513,18 @@
                     },
 
                     skillModifier(attr, skill) {
-                        return this.attrModifier(attr)
-                            + (skill.proficiency ? this.proficiencyBonus : 0)
-                            + (skill.expertise ? this.proficiencyBonus : 0);
+                        return (
+                            this.attrModifier(attr) +
+                            (skill.proficiency ? this.proficiencyBonus : 0) +
+                            (skill.expertise ? this.proficiencyBonus : 0)
+                        );
                     },
 
                     updateTitle() {
-                        document.title = this.name.trim() == "" ?
-                            "D&D Character sheet" : this.name.trim();
+                        document.title =
+                            this.name.trim() == ""
+                                ? "D&D Character sheet"
+                                : this.name.trim();
                     },
 
                     init() {
@@ -539,7 +533,7 @@
 
                         // Load sheet into memory
                         console.log("Loading", urlData);
-                        for(const key in urlData) this[key] = urlData[key];
+                        for (const key in urlData) this[key] = urlData[key];
 
                         // Update page title with character's name
                         this.updateTitle();
@@ -551,42 +545,65 @@
                         location.href = window.location.pathname;
                     },
 
-                    serializeToURI(obj, prefix = '') {
+                    serializeToURI(obj, prefix = "") {
                         const parts = [];
 
                         for (const key in obj) {
-                            if (Object.prototype.hasOwnProperty.call(obj, key)) {
+                            if (
+                                Object.prototype.hasOwnProperty.call(obj, key)
+                            ) {
                                 const value = obj[key];
-                                const constructKey = prefix ? `${prefix}[${key}]` : key;
+                                const constructKey = prefix
+                                    ? `${prefix}[${key}]`
+                                    : key;
 
-                                if (value !== null && typeof value === 'object') {
-                                    parts.push(this.serializeToURI(value, constructKey));
+                                if (
+                                    value !== null &&
+                                    typeof value === "object"
+                                ) {
+                                    parts.push(
+                                        this.serializeToURI(
+                                            value,
+                                            constructKey,
+                                        ),
+                                    );
                                 } else if (value !== undefined) {
-                                    parts.push(encodeURIComponent(constructKey) + '=' + encodeURIComponent(value));
+                                    parts.push(
+                                        encodeURIComponent(constructKey) +
+                                            "=" +
+                                            encodeURIComponent(value),
+                                    );
                                 }
                             }
                         }
 
-                        return parts.join('&');
+                        return parts.join("&");
                     },
 
                     deserializeFromURI() {
-                        const params = new URLSearchParams(window.location.search);
+                        const params = new URLSearchParams(
+                            window.location.search,
+                        );
                         const obj = {};
 
                         for (const [key, value] of params) {
                             // Splits "user[meta][id]" into ["user", "meta", "id"]
-                            const keys = key.match(/[^[\]]+/g); 
-        
+                            const keys = key.match(/[^[\]]+/g);
+
                             keys.reduce((acc, k, i) => {
                                 if (i === keys.length - 1) {
-                                    if (value.toLowerCase() === 'true') {
+                                    if (value.toLowerCase() === "true") {
                                         acc[k] = true;
-                                    } else if (value.toLowerCase() === 'false') {
+                                    } else if (
+                                        value.toLowerCase() === "false"
+                                    ) {
                                         acc[k] = false;
                                     } else {
                                         // Fallback to Number if numeric, otherwise keep string
-                                        acc[k] = isNaN(value) || value.trim() === '' ? value : Number(value);
+                                        acc[k] =
+                                            isNaN(value) || value.trim() === ""
+                                                ? value
+                                                : Number(value);
                                     }
                                 } else {
                                     if (!acc[k]) {
@@ -603,7 +620,7 @@
                     /* serializeToURI(obj) {
                         const json = JSON.stringify(obj);
                         const base64 = btoa(encodeURIComponent(json));
-    
+
                         // 3. Make it URL-safe (replace + / =)
                         return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
                     },
@@ -611,14 +628,14 @@
                     deserializeFromURI() {
                         const params = new URLSearchParams(window.location.search);
                         const compressed = params.get('_state');
-    
+
                         if (!compressed) return {};
 
                         try {
                             // 1. Restore Base64 padding and characters
                             let base64 = compressed.replace(/-/g, '+').replace(/_/g, '/');
                             while (base64.length % 4) base64 += '=';
-        
+
                             // 2. Decode and Parse
                             const json = decodeURIComponent(atob(base64));
                             return JSON.parse(json);
@@ -628,21 +645,22 @@
                         }
                     }, */
 
-                    onDataChange(event) {                        
+                    onDataChange(event) {
                         const sheet = JSON.parse(JSON.stringify(this));
 
                         // Remove data change event entry
                         delete sheet["$event"];
-                        
+
                         console.log("Sheet changed, saving!", sheet);
-                        
+
                         const queryString = this.serializeToURI(sheet);
 
                         // Construct the new URL path
-                        const newRelativePathQuery = window.location.pathname + '?' + queryString;
+                        const newRelativePathQuery =
+                            window.location.pathname + "?" + queryString;
 
                         // Update the browser address bar without reloading the page
-                        history.replaceState(null, '', newRelativePathQuery);
+                        history.replaceState(null, "", newRelativePathQuery);
                     },
                 }));
             });
