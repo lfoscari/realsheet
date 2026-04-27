@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+html {
+  @apply font-Almendra;
+}
+
 label {
   @apply text-gray-500;
 }
@@ -13,11 +17,11 @@ h2 {
 }
 
 input, textarea {
-  @apply placeholder:text-gray-800;
+  @apply placeholder:text-gray-800 border border-gray-700;
 }
 
 textarea {
-  @apply min-w-0 w-full border border-gray-500 p-3 mt-1;
+  @apply min-w-0 w-full p-3 mt-1;
 }
 
 input[type="number"] {

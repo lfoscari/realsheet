@@ -38,10 +38,10 @@
         />
 
         <link href="./src/output.css" rel="stylesheet" />
-        <script
-            defer
-            src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
-        ></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Jim+Nightshade&display=swap" rel="stylesheet">
     </head>
 
     <body
@@ -94,30 +94,30 @@
             <h2 class="col-span-2"></h2>
 
             <label>Experience Points:</label>
-            <input x-model="xp" type="number" min="0" placeholder="XP" />
+            <input x-model.number="xp" type="number" min="0" placeholder="XP" />
 
             <label>Inspirations:</label>
-            <input x-model="inspirations" type="number" min="0" />
+            <input x-model.number="inspirations" type="number" min="0" />
             <label>Proficiency Bonus:</label>
-            <input x-model="proficiencyBonus" type="number" min="0" />
+            <input x-model.number="proficiencyBonus" type="number" min="0" />
             <label>Passive Wisdom:</label>
-            <input x-model="passivePerception" type="number" min="0" />
+            <input x-model.number="passivePerception" type="number" min="0" />
 
             <h2 class="col-span-2"></h2>
             <h2 class="col-span-2">Combat</h2>
 
             <label>Armor Class:</label>
-            <input x-model="ac" type="number" min="0" />
+            <input x-model.number="ac" type="number" min="0" />
             <label>Initiative:</label>
-            <input x-model="initiative" type="number" min="0" />
+            <input x-model.number="initiative" type="number" min="0" />
             <label>Speed:</label>
-            <input x-model="speed" type="number" min="0" />
+            <input x-model.number="speed" type="number" min="0" />
             <label>Hit Point Maximum:</label>
-            <input x-model="hpMax" type="number" min="0" />
+            <input x-model.number="hpMax" type="number" min="0" />
             <label>Current Hit Points:</label>
-            <input x-model="hpCurrent" type="number" min="0" />
+            <input x-model.number="hpCurrent" type="number" min="0" />
             <label>Temporary Hit Points:</label>
-            <input x-model="hpTemp" type="number" min="0" />
+            <input x-model.number="hpTemp" type="number" min="0" />
             <label>Hit Dice Total:</label>
             <input x-model="hitDiceTotal" type="text" />
             <label>Hit Dice Current:</label>
@@ -149,20 +149,25 @@
                         <label>Score:</label>
                         <input
                             class="w-20"
-                            x-model="attr.score"
+                            x-model.number="attr.score"
                             type="number"
                             min="0"
                         />
                     </div>
-                    <label> (<span x-text="attrModifier(attr)"></span>) </label>
+                    <label>
+                        (<span x-show="attrModifier(attr) > 0">+</span><span x-text="attrModifier(attr)"></span>)
+                    </label>
 
-                    <div class="col-span-3">
+                    <div class="col-span-2">
                         <input
                             x-model="attr.savingThrowProficiency"
                             type="checkbox"
                         />
-                        <small>Saving throw proficiency</small>
+                        <small>Saving throw</small>
                     </div>
+                    <label>
+                        (<span x-show="savingThrowModifier(attr) > 0">+</span><span x-text="savingThrowModifier(attr)"></span>)
+                    </label>
 
                     <template x-for="skill in attr.skills" :key="skill.name">
                         <div class="grid grid-cols-subgrid col-span-3">
@@ -182,12 +187,9 @@
                                     class="inline-block w-36"
                                 ></span>
                             </div>
-                            <label
-                                >(<span
-                                    x-text="skillModifier(attr, skill)"
-                                ></span
-                                >)</label
-                            >
+                            <label>
+                                (<span x-show="skillModifier(attr, skill) > 0">+</span><span x-text="skillModifier(attr, skill)"></span>)
+                            </label>
                         </div>
                     </template>
                 </div>
@@ -268,7 +270,7 @@
                         <label>CP:</label>
                         <input
                             class="w-26"
-                            x-model="coins.cp"
+                            x-model.number="coins.cp"
                             type="number"
                             min="0"
                         />
@@ -277,7 +279,7 @@
                         <label>SP:</label>
                         <input
                             class="w-26"
-                            x-model="coins.sp"
+                            x-model.number="coins.sp"
                             type="number"
                             min="0"
                         />
@@ -286,7 +288,7 @@
                         <label>EP:</label>
                         <input
                             class="w-26"
-                            x-model="coins.ep"
+                            x-model.number="coins.ep"
                             type="number"
                             min="0"
                         />
@@ -295,7 +297,7 @@
                         <label>GP:</label>
                         <input
                             class="w-26"
-                            x-model="coins.gp"
+                            x-model.number="coins.gp"
                             type="number"
                             min="0"
                         />
@@ -304,7 +306,7 @@
                         <label>PP:</label>
                         <input
                             class="w-26"
-                            x-model="coins.pp"
+                            x-model.number="coins.pp"
                             type="number"
                             min="0"
                         />
@@ -513,7 +515,13 @@
                         return Math.floor((attr.score - 10) / 2);
                     },
 
+                    savingThrowModifier(attr) {
+                        return this.attrModifier(attr) + 
+                            (attr.savingThrowProficiency ? this.proficiencyBonus : 0);
+                    },
+
                     skillModifier(attr, skill) {
+                        console.log(typeof this.proficiencyBonus)
                         return (
                             this.attrModifier(attr) +
                             (skill.proficiency ? this.proficiencyBonus : 0) +
@@ -582,9 +590,7 @@
                     },
 
                     deserializeFromURI() {
-                        const params = new URLSearchParams(
-                            window.location.search,
-                        );
+                        const params = new URLSearchParams(window.location.search);
                         const obj = {};
 
                         for (const [key, value] of params) {
