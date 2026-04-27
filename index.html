@@ -197,14 +197,25 @@
         </fieldset>
 
         <fieldset class="col-span-1 md:col-span-2 flex flex-col gap-5">
-            <div>
-                <h2>Attacks & Spellcasting</h2>
-                <textarea
-                    x-model="attacks"
-                    rows="5"
-                    cols="50"
-                    placeholder="Weapon Name | Atk Bonus | Damage/Type..."
-                ></textarea>
+            <div class="grid grid-cols-2 gap-5">
+                <div>
+                    <h2>Attacks & Spellcasting</h2>
+                    <textarea
+                        x-model="attacks"
+                        rows="5"
+                        cols="50"
+                        placeholder="Weapon Name | Atk Bonus | Damage/Type..."
+                    ></textarea>
+                </div>
+                <div>
+                    <h2>Features & Traits</h2>
+                    <textarea
+                        x-model="featuresTraits"
+                        rows="6"
+                        cols="50"
+                        placeholder="List of features and traits..."
+                    ></textarea>
+                </div>
             </div>
             <div>
                 <h2>Personality Traits:</h2>
@@ -215,7 +226,7 @@
                     class="p-2 w-full"
                 ></textarea>
             </div>
-            <div class="flex gap-5">
+            <div class="grid grid-cols-3 gap-5">
                 <div>
                     <h2>Ideals</h2>
                     <textarea
@@ -245,15 +256,6 @@
                 </div>
             </div>
             <div>
-                <h2>Features & Traits</h2>
-                <textarea
-                    x-model="featuresTraits"
-                    rows="6"
-                    cols="50"
-                    placeholder="List of features and traits..."
-                ></textarea>
-            </div>
-            <div>
                 <h2>Other Proficiencies & Languages</h2>
                 <textarea
                     x-model="proficiencies"
@@ -265,11 +267,11 @@
 
             <div>
                 <h2>Equipment</h2>
-                <div class="flex flex-wrap justify-around">
+                <div class="grid grid-cols-5">
                     <div>
                         <label>CP:</label>
                         <input
-                            class="w-26"
+                            class="w-30"
                             x-model.number="coins.cp"
                             type="number"
                             min="0"
@@ -278,7 +280,7 @@
                     <div>
                         <label>SP:</label>
                         <input
-                            class="w-26"
+                            class="w-30"
                             x-model.number="coins.sp"
                             type="number"
                             min="0"
@@ -287,7 +289,7 @@
                     <div>
                         <label>EP:</label>
                         <input
-                            class="w-26"
+                            class="w-30"
                             x-model.number="coins.ep"
                             type="number"
                             min="0"
@@ -296,7 +298,7 @@
                     <div>
                         <label>GP:</label>
                         <input
-                            class="w-26"
+                            class="w-30"
                             x-model.number="coins.gp"
                             type="number"
                             min="0"
@@ -305,7 +307,7 @@
                     <div>
                         <label>PP:</label>
                         <input
-                            class="w-26"
+                            class="w-30"
                             x-model.number="coins.pp"
                             type="number"
                             min="0"
