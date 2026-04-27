@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 html {
-  @apply font-Almendra;
+  @apply font-[Almendra];
 }
 
 label {
@@ -21,7 +21,7 @@ input, textarea {
 }
 
 textarea {
-  @apply min-w-0 w-full p-3 mt-1;
+  @apply field-sizing-content min-w-0 w-full p-3 mt-1;
 }
 
 input[type="number"] {
