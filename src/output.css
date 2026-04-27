@@ -331,6 +331,7 @@ input, textarea {
 textarea {
   margin-top: calc(var(--spacing) * 1);
   field-sizing: content;
+  min-height: calc(var(--spacing) * 30);
   width: 100%;
   min-width: calc(var(--spacing) * 0);
   padding: calc(var(--spacing) * 3);
