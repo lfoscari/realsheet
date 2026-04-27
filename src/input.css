@@ -21,7 +21,7 @@ input, textarea {
 }
 
 textarea {
-  @apply min-h-30 field-sizing-content min-w-0 w-full p-3 mt-1;
+  @apply field-sizing-content min-w-0 w-full p-3 mt-1;
 }
 
 input[type="number"] {
