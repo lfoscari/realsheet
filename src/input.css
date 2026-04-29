@@ -28,10 +28,20 @@ input[type="number"] {
   @apply appearance-none;
 }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 input[type="checkbox"] {
   @apply checked:accent-pink-500 focus:ring-0;
 }
 
 input[type="text"], input[type="number"], textarea {
   @apply rounded-md px-2 py-1 caret-pink-500 ring-1 ring-gray-500/10 focus:ring-2 focus:ring-pink-500 focus:outline-none;
+}
+
+.button {
+  @apply px-3 py-1 hover:text-white transition text-gray-500 cursor-pointer
 }

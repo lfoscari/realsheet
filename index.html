@@ -7,35 +7,20 @@
 
         <!-- Primary Meta Tags -->
         <meta name="title" content="D&D Character sheet" />
-        <meta
-            name="description"
-            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
-        />
-        <link rel="canonical" href="https://lfoscari.github.io/realsheet/" />
+        <meta name="description" content="Just a simple website to quickly make a D&D character sheet and share it with your party." />
+        <link rel="canonical" href="https://lfoscari.github.io/realsheet" />
 
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website" />
-        <meta
-            property="og:url"
-            content="https://lfoscari.github.io/realsheet/"
-        />
+        <meta property="og:url" content="https://lfoscari.github.io/realsheet" />
         <meta property="og:title" content="D&D Character sheet" />
-        <meta
-            property="og:description"
-            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
-        />
+        <meta property="og:description" content="Just a simple website to quickly make a D&D character sheet and share it with your party." />
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image" />
-        <meta
-            property="twitter:url"
-            content="https://lfoscari.github.io/realsheet/"
-        />
+        <meta property="twitter:url" content="https://lfoscari.github.io/realsheet" />
         <meta property="twitter:title" content="D&D Character sheet" />
-        <meta
-            property="twitter:description"
-            content="Just a simple, no-fuss website to quickly make a D&D character sheet and share it with your party."
-        />
+        <meta property="twitter:description" content="Just a simple website to quickly make a D&D character sheet and share it with your party." />
 
         <link href="./src/output.css" rel="stylesheet" />
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
@@ -142,7 +127,7 @@
         </fieldset>
 
         <fieldset class="grid grid-cols-[2fr_auto_auto] gap-5">
-            <template x-for="attr in attributes" :key="attr.name">
+            <template x-for="attr in attributes">
                 <div class="grid col-span-3 grid-cols-subgrid items-center">
                     <h2 x-text="attr.name"></h2>
                     <div>
@@ -194,6 +179,29 @@
                     </template>
                 </div>
             </template>
+        </fieldset>
+
+        <fieldset class="col-span-2">
+            <div class="flex justify-between">
+                <h2>Expendables</h2>
+                <a x-on:click="addExpendable" class="button">+ new</a>            
+            </div>
+
+            <div class="columns-2 gap-3 mt-3">
+                <template x-for="(exp, index) in expendables">
+                    <div class="grid grid-cols-[2fr_1fr_auto_1fr_auto] gap-2 items-center pb-3">
+
+                        <input class="w-full" x-model="exp.name" type="text" placeholder="Name" />
+
+                        <input class="w-full text-right" x-model.number="exp.amount" x-bind:max="exp.max" type="number" min="0" />
+                        <label>/</label>
+                        <input class="w-full" x-model.number="exp.max" type="number" min="0" />
+
+                        <a x-on:click="deleteExpendable(index)" class="button pl-0!">×</a>
+
+                    </div>
+                </template>
+            </div>
         </fieldset>
 
         <fieldset class="col-span-1 md:col-span-2 flex flex-col gap-5">
@@ -325,11 +333,7 @@
             <div class="flex flex-wrap justify-around md:items-center gap-3">
                 <!-- <a x-on:click="info()" class="text-gray-500 cursor-pointer m-auto">Information</a> -->
                 <p class="text-gray-500">The character sheet is saved in the URL, feel free to share it or to check the browser history for old ones.</p>
-                <a
-                    x-on:click="reset()"
-                    class="px-3 py-1 hover:border-gray-500 border border-transparent rounded-md text-gray-500 cursor-pointer"
-                    >⌦ Clear</a
-                >
+                <a x-on:click="reset()" class="button">clear</a>
             </div>
         </fieldset>
 
@@ -500,6 +504,8 @@
                         fail3: false,
                     },
 
+                    expendables: [],
+
                     attacks: "",
                     personalityTraits: "",
                     ideals: "",
@@ -523,19 +529,24 @@
                     },
 
                     skillModifier(attr, skill) {
-                        console.log(typeof this.proficiencyBonus)
-                        return (
-                            this.attrModifier(attr) +
+                        return this.attrModifier(attr) +
                             (skill.proficiency ? this.proficiencyBonus : 0) +
-                            (skill.expertise ? this.proficiencyBonus : 0)
-                        );
+                            (skill.expertise ? this.proficiencyBonus : 0);
                     },
 
                     updateTitle() {
-                        document.title =
-                            this.name.trim() == ""
-                                ? "D&D Character sheet"
-                                : this.name.trim();
+                        document.title = this.name.trim() == "" ?
+                            "D&D Character sheet" : this.name.trim();
+                    },
+
+                    addExpendable() {
+                        this.expendables.push({ name: "", amount: 4, max: 4 });
+                        this.saveSheet();
+                    },
+
+                    deleteExpendable(index) {
+                        this.expendables.splice(index, 1);
+                        this.saveSheet();
                     },
 
                     init() {
@@ -626,6 +637,28 @@
                         return obj;
                     },
 
+                    saveSheet() {
+                        const sheet = JSON.parse(JSON.stringify(this));
+                        console.log("Sheet changed, saving!", sheet);
+
+                        // Remove data change event entry
+                        delete sheet["$event"];
+
+                        const queryString = this.serializeToURI(sheet);
+
+                        // Construct the new URL path
+                        const newRelativePathQuery = window.location.pathname + "?" + queryString;
+
+                        // Update the browser address bar without reloading the page
+                        history.replaceState(null, "", newRelativePathQuery);
+                    },
+
+                    onDataChange(event) {
+                        // Ignore events with don't change the data
+                        if (event.type === "change")
+                            this.saveSheet();
+                    },
+
                     /* serializeToURI(obj) {
                         const json = JSON.stringify(obj);
                         const base64 = btoa(encodeURIComponent(json));
@@ -654,23 +687,6 @@
                         }
                     }, */
 
-                    onDataChange(event) {
-                        const sheet = JSON.parse(JSON.stringify(this));
-
-                        // Remove data change event entry
-                        delete sheet["$event"];
-
-                        console.log("Sheet changed, saving!", sheet);
-
-                        const queryString = this.serializeToURI(sheet);
-
-                        // Construct the new URL path
-                        const newRelativePathQuery =
-                            window.location.pathname + "?" + queryString;
-
-                        // Update the browser address bar without reloading the page
-                        history.replaceState(null, "", newRelativePathQuery);
-                    },
                 }));
             });
         </script>
