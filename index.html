@@ -126,7 +126,7 @@
             </div>
         </fieldset>
 
-        <fieldset class="grid grid-cols-[2fr_auto_auto] gap-5">
+        <fieldset class="grid grid-cols-[2fr_auto_30px] gap-5">
             <template x-for="attr in attributes">
                 <div class="grid col-span-3 grid-cols-subgrid items-center">
                     <h2 x-text="attr.name"></h2>
@@ -139,7 +139,7 @@
                             min="0"
                         />
                     </div>
-                    <label>
+                    <label class="text-right">
                         (<span x-show="attrModifier(attr) > 0">+</span><span x-text="attrModifier(attr)"></span>)
                     </label>
 
@@ -150,7 +150,7 @@
                         />
                         <small>Saving throw</small>
                     </div>
-                    <label>
+                    <label class="text-right">
                         (<span x-show="savingThrowModifier(attr) > 0">+</span><span x-text="savingThrowModifier(attr)"></span>)
                     </label>
 
@@ -172,7 +172,7 @@
                                     class="inline-block w-36"
                                 ></span>
                             </div>
-                            <label>
+                            <label class="text-right">
                                 (<span x-show="skillModifier(attr, skill) > 0">+</span><span x-text="skillModifier(attr, skill)"></span>)
                             </label>
                         </div>
