@@ -243,12 +243,6 @@
   .grid-cols-\[2fr_auto_30px\] {
     grid-template-columns: 2fr auto 30px;
   }
-  .grid-cols-\[2fr_auto_50px\] {
-    grid-template-columns: 2fr auto 50px;
-  }
-  .grid-cols-\[2fr_auto_auto\] {
-    grid-template-columns: 2fr auto auto;
-  }
   .grid-cols-subgrid {
     grid-template-columns: subgrid;
   }
@@ -359,8 +353,14 @@ textarea {
   min-width: calc(var(--spacing) * 0);
   padding: calc(var(--spacing) * 3);
 }
+@supports not (field-sizing: content) {
+  textarea {
+    min-height: 10lh;
+  }
+}
 input[type="number"] {
   appearance: none;
+  -moz-appearance: textfield;
 }
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
   -webkit-appearance: none;

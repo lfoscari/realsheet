@@ -24,8 +24,15 @@ textarea {
   @apply field-sizing-content min-w-0 w-full p-3 mt-1;
 }
 
+@supports not (field-sizing: content) {
+  textarea {
+    min-height: 10lh;
+  }
+}
+
 input[type="number"] {
   @apply appearance-none;
+  -moz-appearance: textfield;
 }
 
 input::-webkit-outer-spin-button,
