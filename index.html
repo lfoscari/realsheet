@@ -24,6 +24,7 @@
 
         <link href="./src/output.css" rel="stylesheet" />
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
 
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Almendra:ital,wght@0,400;0,700;1,400;1,700&family=Jim+Nightshade&display=swap" rel="stylesheet">
@@ -567,67 +568,48 @@
                         location.href = window.location.pathname;
                     },
 
-                    serializeToURI(obj, prefix = "") {
-                        const parts = [];
-
-                        for (const key in obj) {
-                            if (
-                                Object.prototype.hasOwnProperty.call(obj, key)
-                            ) {
-                                const value = obj[key];
-                                const constructKey = prefix
-                                    ? `${prefix}[${key}]`
-                                    : key;
-
-                                if (
-                                    value !== null &&
-                                    typeof value === "object"
-                                ) {
-                                    parts.push(
-                                        this.serializeToURI(
-                                            value,
-                                            constructKey,
-                                        ),
-                                    );
-                                } else if (value !== undefined) {
-                                    parts.push(
-                                        encodeURIComponent(constructKey) +
-                                            "=" +
-                                            encodeURIComponent(value),
-                                    );
-                                }
-                            }
-                        }
-
-                        return parts.join("&");
+                    // Compress the full state object into a single short query parameter
+                    // using lz-string for maximum URL compression
+                    serializeToURI(obj) {
+                        // Remove Alpine internals and functions before serializing
+                        const clean = JSON.parse(JSON.stringify(obj));
+                        delete clean.$event;
+                        const json = JSON.stringify(clean);
+                        return LZString.compressToEncodedURIComponent(json);
                     },
 
                     deserializeFromURI() {
                         const params = new URLSearchParams(window.location.search);
+
+                        // New compressed format: ?d=<lz-compressed>
+                        const compressed = params.get("d");
+                        if (compressed) {
+                            try {
+                                const json = LZString.decompressFromEncodedURIComponent(compressed);
+                                if (json) return JSON.parse(json);
+                            } catch (e) {
+                                console.error("Failed to decompress URL state", e);
+                            }
+                            return {};
+                        }
+
+                        // Fallback: legacy verbose format (?name=...&attributes[0][name]=...)
                         const obj = {};
-
                         for (const [key, value] of params) {
-                            // Splits "user[meta][id]" into ["user", "meta", "id"]
                             const keys = key.match(/[^[\]]+/g);
-
                             keys.reduce((acc, k, i) => {
                                 if (i === keys.length - 1) {
                                     if (value.toLowerCase() === "true") {
                                         acc[k] = true;
-                                    } else if (
-                                        value.toLowerCase() === "false"
-                                    ) {
+                                    } else if (value.toLowerCase() === "false") {
                                         acc[k] = false;
                                     } else {
-                                        // Fallback to Number if numeric, otherwise keep string
-                                        acc[k] =
-                                            isNaN(value) || value.trim() === ""
-                                                ? value
-                                                : Number(value);
+                                        acc[k] = isNaN(value) || value.trim() === ""
+                                            ? value
+                                            : Number(value);
                                     }
                                 } else {
                                     if (!acc[k]) {
-                                        // Lookahead: if the next key is a digit, initialize an array
                                         acc[k] = !isNaN(keys[i + 1]) ? [] : {};
                                     }
                                 }
@@ -638,16 +620,11 @@
                     },
 
                     saveSheet() {
-                        const sheet = JSON.parse(JSON.stringify(this));
-                        console.log("Sheet changed, saving!", sheet);
+                        const compressed = this.serializeToURI(this);
+                        console.log("Sheet changed, saving!", compressed.slice(0, 80) + "…");
 
-                        // Remove data change event entry
-                        delete sheet["$event"];
-
-                        const queryString = this.serializeToURI(sheet);
-
-                        // Construct the new URL path
-                        const newRelativePathQuery = window.location.pathname + "?" + queryString;
+                        // Construct the new URL path with short param name
+                        const newRelativePathQuery = window.location.pathname + "?d=" + compressed;
 
                         // Update the browser address bar without reloading the page
                         history.replaceState(null, "", newRelativePathQuery);
@@ -659,33 +636,7 @@
                             this.saveSheet();
                     },
 
-                    /* serializeToURI(obj) {
-                        const json = JSON.stringify(obj);
-                        const base64 = btoa(encodeURIComponent(json));
 
-                        // 3. Make it URL-safe (replace + / =)
-                        return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-                    },
-
-                    deserializeFromURI() {
-                        const params = new URLSearchParams(window.location.search);
-                        const compressed = params.get('_state');
-
-                        if (!compressed) return {};
-
-                        try {
-                            // 1. Restore Base64 padding and characters
-                            let base64 = compressed.replace(/-/g, '+').replace(/_/g, '/');
-                            while (base64.length % 4) base64 += '=';
-
-                            // 2. Decode and Parse
-                            const json = decodeURIComponent(atob(base64));
-                            return JSON.parse(json);
-                        } catch (e) {
-                            console.error("Failed to decompress URL state", e);
-                            return {};
-                        }
-                    }, */
 
                 }));
             });
