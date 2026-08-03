@@ -331,6 +331,29 @@
                 ></textarea>
             </div>
 
+            <div class="rounded-md border border-gray-700 p-3">
+                <div class="flex items-center justify-between gap-3">
+                    <h2>Custom HTML</h2>
+                    <div class="flex items-center gap-2">
+                        <label class="text-sm text-gray-500">
+                            <input type="checkbox" x-model="showCustomHtml" />
+                            show
+                        </label>
+                        <a x-on:click="customHtml = ''" class="button">clear</a>
+                    </div>
+                </div>
+                <div x-show="showCustomHtml">
+                    <textarea
+                        x-model="customHtml"
+                        rows="8"
+                        placeholder="<div class='rounded bg-pink-500 p-3'>Hello</div>"
+                    ></textarea>
+                    <div class="mt-3 rounded-md border border-gray-700 bg-gray-950/50 p-3">
+                        <div x-ref="customHtmlPreview"></div>
+                    </div>
+                </div>
+            </div>
+
             <div class="flex flex-wrap justify-around md:items-center gap-3">
                 <!-- <a x-on:click="info()" class="text-gray-500 cursor-pointer m-auto">Information</a> -->
                 <p class="text-gray-500">The character sheet is saved in the URL, feel free to share it or to check the browser history for old ones.</p>
@@ -340,6 +363,8 @@
 
         <script>
             document.addEventListener("alpine:init", () => {
+                window.getSheetData = () => Alpine.$data(document.body);
+
                 Alpine.data("sheet", () => ({
                     name: "",
                     classLevel: "",
@@ -517,6 +542,8 @@
 
                     coins: { cp: 0, sp: 0, ep: 0, gp: 0, pp: 0 },
                     equipment: "",
+                    customHtml: "",
+                    showCustomHtml: true,
 
                     attrModifier(attr) {
                         if (attr.score < 10)
@@ -533,6 +560,23 @@
                         return this.attrModifier(attr) +
                             (skill.proficiency ? this.proficiencyBonus : 0) +
                             (skill.expertise ? this.proficiencyBonus : 0);
+                    },
+
+                    renderCustomHtml() {
+                        const host = this.$refs.customHtmlPreview;
+                        if (!host) return;
+
+                        host.innerHTML = this.customHtml || "";
+
+                        host.querySelectorAll("script").forEach((script) => {
+                            const replacement = document.createElement("script");
+                            if (script.src) {
+                                replacement.src = script.src;
+                            } else {
+                                replacement.textContent = script.textContent;
+                            }
+                            script.replaceWith(replacement);
+                        });
                     },
 
                     updateTitle() {
@@ -561,6 +605,8 @@
                         // Update page title with character's name
                         this.updateTitle();
                         this.$watch("name", () => this.updateTitle());
+                        this.$watch("customHtml", () => this.renderCustomHtml());
+                        this.$nextTick(() => this.renderCustomHtml());
                     },
 
                     reset() {
